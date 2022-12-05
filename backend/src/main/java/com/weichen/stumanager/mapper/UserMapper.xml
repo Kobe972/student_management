@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weichen.stumanager.mapper.UserMapper">
+    <select id="getUserByUserName" parameterType="string" resultType="com.example.securitydemo.po.User">
+        select
+            au.user_id userId,
+            au.user_name userName,
+            au.password,
+            au.expired,
+            au.locked
+        from
+            auth_user au
+        where
+            au.user_name = #{userName}
+    </select>
+
+    <select id="getUserRolesByUserId" parameterType="integer" resultType="com.example.securitydemo.po.Role">
+        select
+            ar.role_id roleId,
+            ar.role_code roleCode,
+            ar.role_name roleName
+        from
+            auth_user_role aur
+                left join auth_role ar on
+                aur.role_code = ar.role_code
+        where
+            aur.user_id = #{userId}
+    </select>
+</mapper>

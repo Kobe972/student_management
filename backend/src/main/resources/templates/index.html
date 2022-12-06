@@ -1,8 +1,238 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>微臣托福在线平台</title>
-    </head>
-    <body>
-        <p>This is the index page, but it has not been developed yet!</p>
-    </body>
+<head>
+  <meta charset="utf-8">
+  <title>托福教育机构管理平台</title>
+  <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/vue-material.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css">
+</head>
+<body>
+  <div id="app">
+    <md-app>
+      <md-app-toolbar>
+        <h1 class="md-title">托福教育机构管理平台</h1>
+        <div class="md-toolbar-section-end">
+          <md-button>用户登录</md-button>
+        </div>
+      </md-app-toolbar>
+      <md-app-content>
+        <md-tabs>
+          <md-tab id="courses" md-label="课程">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">课程报名</div>
+              </md-card-header>
+              <md-card-content>
+                <md-tabs class="md-dense">
+                  <md-tab id="paid-courses" md-label="付费课程"></md-tab>
+                  <md-tab id="free-courses" md-label="公开课"></md-tab>
+                </md-tabs>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-header>
+                <div class="md-title">重要课程推荐</div>
+              </md-card-header>
+              <md-card-content>
+                <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                      <md-card-media>
+                        <img src="https://via.placeholder.com/600x300" alt="课程图片">
+                      </md-card-media>
+                      <md-card-header>
+                        <div class="md-title">课程标题</div>
+                      </md-card-header>
+                      <md-card-content>
+                        <p>课程描述</p>
+                      </md-card-content>
+                      <md-card--actions>
+                        <md-button>报名</md-button>
+                      </md-card-actions>
+                    </md-card>
+                  </div>
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                    <md-card-media>
+                      <img src="https://via.placeholder.com/600x300" alt="课程图片">
+                    </md-card-media>
+                    <md-card-header>
+                      <div class="md-title">课程标题</div>
+                    </md-card-header>
+                    <md-card-content>
+                      <p>课程描述</p>
+                    </md-card-content>
+                    <md-card-actions>
+                      <md-button>报名</md-button>
+                    </md-card-actions>
+                    </md-card>
+                  </div>
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                      <md-card-media>
+                        <img src="https://via.placeholder.com/600x300" alt="课程图片">
+                      </md-card-media>
+                      <md-card-header>
+                        <div class="md-title">课程标题</div>
+                      </md-card-header>
+                      <md-card-content>
+                        <p>课程描述</p>
+                      </md-card-content>
+                      <md-card-actions>
+                        <md-button>报名</md-button>
+                      </md-card-actions>
+                    </md-card>
+                  </div>
+                </div>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="my-courses" md-label="我的课程">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">我的课表</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是我的课表内容。</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-header>
+                <div class="md-title">学习进度</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是我的学习进度内容。</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-header>
+                <div class="md-title">每日打卡</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是我的每日打卡内容。</p>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="articles" md-label="精选文章">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">精选文章</div>
+              </md-card-header>
+              <md-card-content>
+                <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                      <md-card-header>
+                        <div class="md-title">文章标题</div>
+                        <div class="md-subhead">作者</div>
+                      </md-card-header>
+                      <md-card-content>
+                        <p>文章摘要</p>
+                      </md-card-content>
+                      <md-card-actions>
+                        <md-button>阅读全文</md-button>
+                      </md-card-actions>
+                    </md-card>
+                  </div>
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                      <md-card-header>
+                        <div class="md-title">文章标题</div>
+                        <div class="md-subhead">作者</div>
+                      </md-card-header>
+                      <md-card-content>
+                        <p>文章摘要</p>
+                      </md-card-content>
+                      <md-card-actions>
+                        <md-button>阅读全文</md-button>
+                      </md-card-actions>
+                    </md-card>
+                  </div>
+                  <div class="md-layout-item md-small-size-100">
+                    <md-card>
+                      <md-card-header>
+                        <div class="md-title">文章标题</div>
+                        <div class="md-subhead">作者</div>
+                      </md-card-header>
+                      <md-card-content>
+                        <p>文章摘要</p>
+                      </md-card-content>
+                      <md-card-actions>
+                        <md-button>阅读全文</md-button>
+                      </md-card-actions>
+                    </md-card>
+                  </div>
+                </div>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="downloads" md-label="资料下载">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">免费资料</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是免费资料的内容。</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-header>
+                <div class="md-title">付费资料</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是付费资料的内容。</p>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="exercises" md-label="练习">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">练习测试</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是练习测试的内容。</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-header>
+                <div class="md-title">口语和写作评分</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是口语和写作评分的内容。</p>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="quizzes" md-label="课程测验">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">课程测验</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是课程测验的内容。</p>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+          <md-tab id="mock-exams" md-label="模考">
+            <md-card>
+              <md-card-header>
+                <div class="md-title">模考</div>
+              </md-card-header>
+              <md-card-content>
+                <p>这里是模考的内容。</p>
+              </md-card-content>
+            </md-card>
+          </md-tab>
+        </md-tabs>
+      </md-app-content>
+    </md-app>
+  </div>
+  <script src="https://unpkg.com/vue@2.x/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-material@beta/dist/vue-material.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app'
+    })
+  </script>
+</body>
 </html>

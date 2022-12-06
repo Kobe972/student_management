@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserMapper {
     User getUserByUserName(String userName);
     List<Role> getUserRolesByUserId(Integer userId);
+    void insertUserToAuthUser(String userName, String password);
+    void insertUserToAutoUserRole(int userId, String roleCode);
 }

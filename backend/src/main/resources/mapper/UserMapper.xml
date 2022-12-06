@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weichen.stumanager.mapper.UserMapper">
-    <select id="getUserByUserName" parameterType="string" resultType="com.example.securitydemo.po.User">
+    <select id="getUserByUserName" parameterType="string" resultType="com.weichen.stumanager.entity.User">
         select
             au.user_id userId,
             au.user_name userName,
@@ -14,7 +14,7 @@
             au.user_name = #{userName}
     </select>
 
-    <select id="getUserRolesByUserId" parameterType="integer" resultType="com.example.securitydemo.po.Role">
+    <select id="getUserRolesByUserId" parameterType="integer" resultType="com.weichen.stumanager.entity.Role">
         select
             ar.role_id roleId,
             ar.role_code roleCode,
@@ -26,4 +26,16 @@
         where
             aur.user_id = #{userId}
     </select>
+
+    <insert id="insertUserToAuthUser" >
+        insert into auth_user
+            (user_name, password, expired, locked)
+            VALUES(#{userName}, #{password}, 0, 0)
+    </insert>
+    
+    <insert id="insertUserToAutoUserRole">
+        insert into auth_user_role
+            (user_id, role_code)
+            VALUES(#{userId},#{roleCode})
+    </insert>
 </mapper>

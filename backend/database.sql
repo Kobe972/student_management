@@ -9,7 +9,8 @@ CREATE TABLE `auth_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO auth_user (user_id, user_name, password, expired, locked) VALUES(1, 'root', 'xyl3331996', 0, 0);
+-- 密码明文：xyl33331996，使用BCryptPasswordEncoder得到。
+INSERT INTO auth_user (user_id, user_name, password, expired, locked) VALUES(1, 'root', '$2a$10$QpTpPxkd7.kZzDdj/k7rR.LqTuTxln/sHIATyL1MTah6ghy51QfqW', 0, 0);
 DROP TABLE IF EXISTS `auth_role`;
 CREATE TABLE `auth_role` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,

@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Quiz</title>
+    </head>
+    <body>
+        <form id="quiz-form">
+            <h1 id="quiz-title"></h1>
+            <div id="quiz-options"></div>
+            <button type="submit">Submit</button>
+        </form>
+        <script>
+        var numTrue = 0;
+        var wordlistEn;
+        var wordlistCh;
+        var progress=0;
+        var sheet=0;
+
+        const form = document.getElementById('quiz-form');
+        const title = document.getElementById('quiz-title');
+        const options = document.getElementById('quiz-options');
+
+        // Send initial request
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getSheet?sheet='+sheet, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                const response = JSON.parse(this.responseText);
+                wordlistEn=response.wordlistEn;
+                wordlistCh=response.wordlistCh;
+                title.innerHTML = wordlistEn[0];
+                afterReceicedSheet();
+            }
+        }
+        function afterReceicedSheet()
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getChoices?word='+wordlistEn[0]+"&sheet="+sheet, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    const response = JSON.parse(this.responseText);
+                    response.choices.forEach(choice => {
+                        const input = document.createElement('input');
+                        input.type = 'radio';
+                        input.name = 'quiz-option';
+                        input.value = choice;
+
+                        const label = document.createElement('label');
+                        label.innerHTML = choice;
+                        
+                        var br = document.createElement("br");
+
+                        options.appendChild(input);
+                        options.appendChild(label);
+                        options.appendChild(br);
+                    });
+                }
+            }
+        }
+        
+        // Handle form submission
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+                // Get selected option
+            const selectedOption = options.querySelector('input:checked');
+
+            // Update numTrue and numFalse
+            if (selectedOption.value === wordlistCh[progress]) {
+                numTrue++;
+            }
+            progress++;
+            if(progress>=wordlistEn.length)
+            {
+                var score=(numTrue/wordlistEn.length)*100;
+                document.body.innerHTML='';
+                alert(score);
+            }
+            else{
+                 // Send updated request
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getChoices?word='+wordlistEn[progress]+"&sheet="+sheet, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        const response = JSON.parse(this.responseText);
+                        title.innerHTML = wordlistEn[progress];
+                        options.innerHTML = '';
+                        response.choices.forEach(choice => {
+                            const input = document.createElement('input');
+                            input.type = 'radio';
+                            input.name = 'quiz-option';
+                            input.value = choice;
+
+                            const label = document.createElement('label');
+                            label.innerHTML = choice;
+                            var br = document.createElement("br");
+
+                            options.appendChild(input);
+                            options.appendChild(label);
+                            options.appendChild(br);
+                        });
+                    }
+                }
+            }
+        });
+        </script>
+    </body>
+</html>
+
+

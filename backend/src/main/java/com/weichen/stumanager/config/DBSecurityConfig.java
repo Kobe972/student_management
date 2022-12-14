@@ -20,7 +20,8 @@ public class DBSecurityConfig
         // @formatter:off
         http.authorizeHttpRequests()
         .antMatchers("/register").permitAll()
-        .antMatchers("/").hasRole("member")
+        .antMatchers("/listeningWordTest").hasRole("member")
+        .antMatchers("/").permitAll()
         .anyRequest().permitAll()
         .and()
         .formLogin()

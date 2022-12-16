@@ -21,6 +21,8 @@ public class DBSecurityConfig
         http.authorizeHttpRequests()
         .antMatchers("/register").permitAll()
         .antMatchers("/listeningWordTest").hasRole("member")
+        .antMatchers("/uploadResources").hasRole("root")
+        .antMatchers("/upload/resources").hasRole("root")
         .antMatchers("/").permitAll()
         .anyRequest().permitAll()
         .and()

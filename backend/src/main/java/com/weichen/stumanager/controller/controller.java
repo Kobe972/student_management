@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -191,7 +192,8 @@ public class controller {
         {
             courseInfoService.delete(id);
             String basePath = "image" + File.separator + "courseCover" + File.separator;
-            File file = new File(basePath+coverURL);
+            int lastSlashIndex = coverURL.lastIndexOf('/');
+            File file = new File(basePath+coverURL.substring(lastSlashIndex + 1));
             file.delete();
             return "index";
         } catch (Exception e)

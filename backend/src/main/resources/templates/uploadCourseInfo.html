@@ -1,0 +1,69 @@
+<head>
+  <style>
+    input[type="text"] {
+      width: 50%;
+    }
+    textarea {
+      width: 50%;
+      height: auto;
+      min-height: 50%;
+    }
+  </style>
+  <title>
+    资料上传
+  </title>
+</head>
+<body>
+    <form id="upload-form" action="/upload/courseInfo" method="post" enctype="multipart/form-data">
+        <div>
+          <label for="title">标题</label>
+          <input type="text" id="title" name="title">
+        </div>
+        <div>
+            <label for="description">报名链接</label>
+            <input type="text" id="signUpURL" name="signUpURL">
+        </div>
+        <div>
+          <label for="description">简介</label>
+          <textarea id="description" name="description"></textarea>
+        </div>
+      <div>
+        <label for="file">封面</label>
+        <input type="file" id="file" name="file" accept="image/*">
+      </div>
+      <div>
+        <input type="submit" value="上传">
+      </div>
+    </form>
+
+    <script>
+      // Send an AJAX request to the server when the form is submitted
+      document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the form from submitting normally
+
+        // Create a new FormData object to send the file
+        var formData = new FormData();
+        formData.append('file', document.getElementById('file').files[0]);
+        formData.append('title', document.getElementById('title').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('signUpURL', document.getElementById('signUpURL').value);
+
+
+        // Send the AJAX request to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload/courseInfo');
+        xhr.onload = function() {
+          // Check if the upload was successful
+          if (xhr.status === 200) {
+            // Clear the form and display a success notification
+            document.getElementById('upload-form').reset();
+            alert('上传成功');
+          } else {
+            // Display a failure notification
+            alert('上传失败');
+          }
+        };
+        xhr.send(formData);
+      });
+    </script>
+</body>

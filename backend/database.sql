@@ -43,3 +43,14 @@ CREATE TABLE `uploadedResources` (
 `url` varchar(200) NOT NULL,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `courseInfo`;
+CREATE TABLE `courseInfo` (
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
+                                     `uploader` varchar(100) NOT NULL,
+                                     `title` varchar(100) NOT NULL,
+                                     `description` varchar(2000) NULL,
+                                     `coverURL` varchar(200) NOT NULL,
+                                     `signUpURL` varchar(200) NOT NULL,
+                                     PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

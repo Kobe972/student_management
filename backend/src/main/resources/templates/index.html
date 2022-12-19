@@ -2,6 +2,8 @@
     <head>
         <title>微臣托福教育在线平台</title>
         <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     </head>
     <body>
         <div id="navigator">
@@ -12,6 +14,19 @@
                   </li>
                 </ul>
               </nav>
+        </div>
+        <div id="courseList">
+          <div v-for="course in courses" :key="course.title" class="courseItem" @click="navigateTo(course.signUpURL)">
+            <div>
+              <img v-bind:src="course.coverURL" alt="course image">
+            </div>
+            <div>
+              <h3>{{ course.title }}</h3>
+            </div>
+            <div>
+              <p>{{ course.description }}</p>
+            </div>
+          </div>
         </div>
 
         <script>
@@ -24,7 +39,47 @@
                 { id: 3, text: '听力1500词测试', url: '/listeningWordTest' },
             ]
             }
-        })
+        });
+        new Vue({
+        el: '#courseList',
+        data: {
+            courses: []
+        },
+        mounted() {
+            this.fetchCourses()
+        },
+        methods: {
+            fetchCourses() {
+            axios.get('http://127.0.0.1:8080/courseList?num=5')
+                .then(response => {
+                this.courses = response.data
+                })
+                .catch(error => {
+                console.error(error)
+                })
+            },
+            navigateTo(url) {
+                  window.location.href = url;
+                }
+        }
+        });
         </script>
+        <style>
+            div.courseItem {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              cursor: pointer;
+            }
+            
+            div.courseItem img {
+              width: 200px;
+              height: 150px;
+            }
+            
+            div.courseItem h3 {
+              font-weight: bold;
+            }
+        </style>
     </body>
 </html>

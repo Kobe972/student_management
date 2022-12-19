@@ -1,15 +1,15 @@
 package com.weichen.stumanager.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weichen.stumanager.entity.CourseInfo;
 import com.weichen.stumanager.entity.User;
+import com.weichen.stumanager.service.CourseInfoService;
 import com.weichen.stumanager.service.UploadedResourcesService;
 import com.weichen.stumanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +32,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 public class controller {
@@ -40,6 +41,9 @@ public class controller {
 
     @Resource
     UploadedResourcesService uploadedResourcesService=null;
+
+    @Resource
+    CourseInfoService courseInfoService=null;
 
     @RequestMapping("/")
     public String index() {
@@ -115,4 +119,52 @@ public class controller {
             return e.toString();
         }
     }
+    @PostMapping("/upload/courseInfo")
+    @ResponseBody
+    public String uploadCourseInfoPost(@RequestParam("file") MultipartFile file,@RequestParam("title") String title,@RequestParam("description") String description,@RequestParam("signUpURL") String signUpURL)
+    {
+        String basePath = "image" + File.separator + "courseCover" + File.separator;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userName = userDetails.getUsername();  // Assuming that the user's ID is stored in the "username" field of the UserDetails object
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSS");
+        String currentTime = now.format(formatter);
+        try {
+            Files.createDirectories(Paths.get(basePath));
+            byte[] bytes = file.getBytes();
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            byte[] hash = messageDigest.digest((userName+title+description+file.getOriginalFilename()).getBytes(StandardCharsets.UTF_8));
+            String filename = String.format("%032x", new BigInteger(1, hash))+currentTime+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            Path path = Paths.get(basePath+filename);
+            Files.write(path, bytes);
+            courseInfoService.upload(userName,title,description,"/image/courseCover/"+filename,signUpURL);
+            return "success";
+        } catch (IOException | NoSuchAlgorithmException e) {
+            return e.toString();
+        }
+    }
+    @GetMapping("/courseList")
+    @ResponseBody
+    public String getCourseList(@RequestParam("num") int num) {
+        List<CourseInfo> courseInfos = courseInfoService.getAllInfo();
+        List<CourseInfo> subList = courseInfos.subList(Math.max(0, courseInfos.size() - num), courseInfos.size());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(subList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    @GetMapping(value = "/image/courseCover/{coverURL}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getCourseCover(@PathVariable String coverURL) throws IOException {
+        String basePath = "image" + File.separator + "courseCover" + File.separator;
+        File file = new File(basePath+coverURL);
+        return Files.readAllBytes(file.toPath());
+    }
+    @GetMapping("uploadCourseInfo")
+    public String uploadCourseInfoGet(){return "uploadCourseInfo";}
 }

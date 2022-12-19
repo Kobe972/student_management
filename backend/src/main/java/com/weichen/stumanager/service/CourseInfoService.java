@@ -22,4 +22,8 @@ public class CourseInfoService {
     {
         courseInfoMapper.upload(uploader,title,description,coverURL,signUpURL);
     }
+    public void delete(String id)
+    {
+        courseInfoMapper.delete(id);
+    }
 }

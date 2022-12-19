@@ -11,14 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -32,7 +36,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class controller {
@@ -82,11 +89,19 @@ public class controller {
         String response = restTemplate.getForObject(fullUrl, String.class);
         return response;
     }
-
-    @GetMapping("/listeningWordTest")
-    public String listeningWordTest() {
-        return "wordLiteralTest";
+    @GetMapping("/sheetChoice")
+    public String sheetChoice()
+    {
+        return "sheetChoice";
     }
+    @GetMapping("/listeningWordTest")
+    public ModelAndView listeningWordTest(@RequestParam("sheet") int sheet) {
+        ModelAndView result;
+        result = new ModelAndView("wordLiteralTest");
+        result.addObject("sheet",sheet);
+        return result;
+    }
+
 
     @GetMapping("/uploadResources")
     public String uploadResourcesGet() {
@@ -167,4 +182,42 @@ public class controller {
     }
     @GetMapping("uploadCourseInfo")
     public String uploadCourseInfoGet(){return "uploadCourseInfo";}
+    @GetMapping("backstage")
+    public String backstage(){return "backstage";}
+    @GetMapping("delete/courseInfo")
+    public String deleteCourseInfo(@RequestParam("id") String id, @RequestParam("coverURL") String coverURL)
+    {
+        try
+        {
+            courseInfoService.delete(id);
+            String basePath = "image" + File.separator + "courseCover" + File.separator;
+            File file = new File(basePath+coverURL);
+            file.delete();
+            return "index";
+        } catch (Exception e)
+        {
+            return "index";
+        }
+    }
+    @GetMapping("/getRole")
+    @ResponseBody
+    public Set<String> getRole(Authentication authentication) {
+        if (authentication == null) {
+            return Collections.emptySet();
+        }
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
+    }
+    @GetMapping("/getUsername")
+    @ResponseBody
+    public String getUsername(Authentication authentication)
+    {
+        if(authentication==null) return "";
+        String userName;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userName = userDetails.getUsername();
+        return userName;
+    }
 }

@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>后台管理界面</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    </head>
+    <body>
+        <div id="navigator">
+            <nav style="position:absolute; top:0; right:0;">
+                <ul style="list-style-type:none; display:flex;">
+                  <li v-for="item in items" :key="item.id" style="margin-right:20px;">
+                    <a :href="item.url" style="text-decoration:none; font-weight:bold;">{{ item.text }}</a>
+                  </li>
+                </ul>
+              </nav>
+        </div>
+        <script>
+        var navigator=new Vue({
+            el:'#navigator',
+            data:{
+                items: [
+                { id: 1, text: '课程报名上传', url: '/uploadCourseInfo' },
+                { id: 2, text: '资料上传', url: '/uploadResources' },
+            ]
+            }
+        });
+        </script>
+</html>

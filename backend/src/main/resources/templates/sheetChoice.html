@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>词汇类型选择</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <h1>词汇类型选择</h1>
+    <div id="app">
+      <form>
+        <label for="sheetSelect">选择词汇类型:</label>
+        <select id="sheetSelect" v-model="selectedSheet">
+          <option v-for="(sheet, index) in sheetNames" :key="index" :value="index">{{ sheet }}</option>
+        </select>
+        <button type="button" @click="submitForm">确认</button>
+      </form>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            sheetNames: [],
+            selectedSheet: 0,
+          };
+        },
+        created() {
+          axios
+            .get('http://127.0.0.1:7000/listeningWordTest/getSheetNames')
+            .then((response) => {
+              this.sheetNames = response.data.sheetNames;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        },
+        methods: {
+          submitForm() {
+            window.location.href = `/listeningWordTest?sheet=${this.selectedSheet}`;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

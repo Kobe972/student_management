@@ -3,18 +3,28 @@
         <title>微臣托福教育在线平台</title>
         <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
     </head>
     <body>
-        <div id="navigator">
-            <nav style="position:absolute; top:0; right:0;">
-                <ul style="list-style-type:none; display:flex;">
-                  <li v-for="item in items" :key="item.id" style="margin-right:20px;">
-                    <a :href="item.url" style="text-decoration:none; font-weight:bold;">{{ item.text }}</a>
-                  </li>
-                </ul>
-              </nav>
-        </div>
+      <h1>微臣托福教育在线平台</h1>
+      <div id="navigator">
+        <nav style="position:absolute; top:0; right:0;">
+          <ul style="list-style-type:none; display:flex;">
+            <li v-for="item in items" :key="item.id" style="margin-right:20px;">
+              <div v-if="item.text === '登录'">
+                <a v-if="!username" :href="item.url" style="text-decoration:none; font-weight:bold;">{{ item.text }}</a>
+                <span v-else style="font-weight:bold;">{{ username }}</span>
+              </div>
+              <div v-else-if="item.text === '登出'">
+                <a v-if="username" :href="item.url" style="text-decoration:none; font-weight:bold;">{{ item.text }}</a>
+              </div>
+              <div v-else>
+                <a :href="item.url" style="text-decoration:none; font-weight:bold;">{{ item.text }}</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>      
+        <h2>课程推荐</h2>
         <div id="courseList">
           <div v-for="course in courses" :key="course.title" class="courseItem" @click="navigateTo(course.signUpURL)">
             <div>
@@ -26,19 +36,36 @@
             <div>
               <p>{{ course.description }}</p>
             </div>
+            <div v-if="isRoot">
+              <a :href="'/delete/courseInfo/?id=' + course.id + '&coverURL=' + course.coverURL">删除</a>
+            </div>            
           </div>
         </div>
 
         <script>
-        var navigator=new Vue({
-            el:'#navigator',
-            data:{
-                items: [
+        new Vue({
+          el: '#navigator',
+          data() {
+            return {
+              items: [
                 { id: 1, text: '登录', url: '/login' },
                 { id: 2, text: '注册', url: '/register' },
-                { id: 3, text: '听力1500词测试', url: '/listeningWordTest' },
-            ]
-            }
+                { id: 3, text: '听力1500词测试', url: '/sheetChoice' },
+                { id: 4, text: '登出', url: '/logout' },
+              ],
+              username: '',
+            };
+          },
+          mounted() {
+            axios
+              .get('http://127.0.0.1:8080/getUsername')
+              .then((response) => {
+                this.username = response.data;
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          },
         });
         new Vue({
         el: '#courseList',
@@ -46,7 +73,8 @@
             courses: []
         },
         mounted() {
-            this.fetchCourses()
+            this.fetchCourses();
+            this.getRole();
         },
         methods: {
             fetchCourses() {
@@ -58,6 +86,15 @@
                 console.error(error)
                 })
             },
+            getRole() {
+              axios.get('http://127.0.0.1:8080/getRole')
+              .then(response => {
+                this.isRoot = response.data.includes("ROLE_root");
+              })
+              .catch(error => {
+                console.error(error)
+              });
+            },
             navigateTo(url) {
                   window.location.href = url;
                 }
@@ -66,10 +103,12 @@
         </script>
         <style>
             div.courseItem {
-              display: flex;
+              display: inline-flex;
               flex-direction: column;
               align-items: center;
               cursor: pointer;
+              width: 300px;
+              margin: 0 10px;
             }
             
             div.courseItem img {

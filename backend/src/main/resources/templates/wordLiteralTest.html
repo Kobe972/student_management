@@ -21,7 +21,7 @@
 
         // Send initial request
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getSheet?sheet='+sheet, true);
+        xhr.open('GET', '/listeningWordTest/getSheet?sheet='+sheet, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send();
         xhr.onreadystatechange = function() {
@@ -36,7 +36,7 @@
         function afterReceicedSheet()
         {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getChoices?word='+wordlistEn[0]+"&sheet="+sheet, true);
+            xhr.open('GET', '/listeningWordTest/getChoices?word='+wordlistEn[0]+"&sheet="+sheet, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send();
             xhr.onreadystatechange = function() {
@@ -85,7 +85,7 @@
             else{
                  // Send updated request
                 const xhr = new XMLHttpRequest();
-                xhr.open('GET', 'http://127.0.0.1:8080/listeningWordTest/getChoices?word='+wordlistEn[progress]+"&sheet="+sheet, true);
+                xhr.open('GET', '/listeningWordTest/getChoices?word='+wordlistEn[progress]+"&sheet="+sheet, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.send();
                 xhr.onreadystatechange = function() {

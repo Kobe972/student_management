@@ -60,7 +60,7 @@
           },
           mounted() {
             axios
-              .get('http://127.0.0.1:8080/getUsername')
+              .get('/getUsername')
               .then((response) => {
                 this.username = response.data;
               })
@@ -80,7 +80,7 @@
         },
         methods: {
             fetchCourses() {
-            axios.get('http://127.0.0.1:8080/courseList?num=5')
+            axios.get('/courseList?num=5')
                 .then(response => {
                 this.courses = response.data
                 })
@@ -89,7 +89,7 @@
                 })
             },
             getRole() {
-              axios.get('http://127.0.0.1:8080/getRole')
+              axios.get('/getRole')
               .then(response => {
                 this.isRoot = response.data.includes("ROLE_root");
               })

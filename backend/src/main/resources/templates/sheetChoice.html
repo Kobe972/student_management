@@ -26,7 +26,7 @@
         },
         created() {
           axios
-            .get('http://127.0.0.1:7000/listeningWordTest/getSheetNames')
+            .get('/listeningWordTest/getSheetNames')
             .then((response) => {
               this.sheetNames = response.data.sheetNames;
             })

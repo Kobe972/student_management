@@ -57,7 +57,7 @@
           },
           mounted() {
             axios
-              .get('http://127.0.0.1:8080/getUsername')
+              .get('/getUsername')
               .then((response) => {
                 this.username = response.data;
               })
@@ -77,7 +77,7 @@
         },
         methods: {
           fetchResources() {
-            axios.get('http://127.0.0.1:8080/resourceList?num=10')
+            axios.get('/resourceList?num=10')
                 .then(response => {
                 this.resources = response.data
                 })
@@ -86,7 +86,7 @@
                 })
             },
             getRole() {
-              axios.get('http://127.0.0.1:8080/getRole')
+              axios.get('/getRole')
               .then(response => {
                 this.isRoot = response.data.includes("ROLE_root")|response.data.includes("ROLE_faculty");
               })

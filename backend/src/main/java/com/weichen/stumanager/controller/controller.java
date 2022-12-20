@@ -93,6 +93,15 @@ public class controller {
         return response;
     }
 
+    @GetMapping("/listeningWordTest/getSheetNames")
+    @ResponseBody
+    public String getSheetNames() throws JsonProcessingException {
+        String url = "http://127.0.0.1:7000/listeningWordTest/getSheetNames";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(url, String.class);
+        return response;
+    }
+
     @GetMapping("/listeningWordTest/getChoices")
     @ResponseBody
     public String getChoices(@RequestParam("sheet") String sheet, @RequestParam("word") String word) {

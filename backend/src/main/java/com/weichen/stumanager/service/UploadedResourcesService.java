@@ -21,4 +21,8 @@ public class UploadedResourcesService {
     {
         uploadedResourcesMapper.upload(uploader,title,description,url);
     }
+    public void delete(String id)
+    {
+        uploadedResourcesMapper.delete(id);
+    }
 }

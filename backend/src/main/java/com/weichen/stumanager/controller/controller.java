@@ -3,6 +3,7 @@ package com.weichen.stumanager.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weichen.stumanager.entity.CourseInfo;
+import com.weichen.stumanager.entity.UploadedResources;
 import com.weichen.stumanager.entity.User;
 import com.weichen.stumanager.service.CourseInfoService;
 import com.weichen.stumanager.service.UploadedResourcesService;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -67,6 +69,17 @@ public class controller {
     @GetMapping("/register")
     public String memberRegister() {
         return "memberRegister";
+    }
+
+    @PostMapping("/registerFaculty")
+    public String addFacultyUser(@RequestParam("userName") String userName, @RequestParam("password") String password) {
+        userService.insertFaculty(userName, password);
+        return "redirect:/login";
+    }
+
+    @GetMapping("/facultyRegister")
+    public String facultyRegister() {
+        return "facultyRegister";
     }
 
     @GetMapping("listeningWordTest/getSheet")
@@ -222,4 +235,47 @@ public class controller {
         userName = userDetails.getUsername();
         return userName;
     }
+    @GetMapping("/resourceList")
+    @ResponseBody
+    public String getUploadedResourceList(@RequestParam("num") int num) {
+        List<UploadedResources> uploadedResources = uploadedResourcesService.getAllResources();
+        List<UploadedResources> subList = uploadedResources.subList(Math.max(0, uploadedResources.size() - num), uploadedResources.size());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(subList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    @GetMapping("delete/resource")
+    public String deleteUploadedResource(@RequestParam("id") String id, @RequestParam("url") String url)
+    {
+        try
+        {
+            uploadedResourcesService.delete(id);
+            String basePath = "uploadedFiles" + File.separator + "resources" + File.separator;
+            int lastSlashIndex = url.lastIndexOf('/');
+            File file = new File(basePath+url.substring(lastSlashIndex + 1));
+            file.delete();
+            return "resources";
+        } catch (Exception e)
+        {
+            return "resources";
+        }
+    }
+    @GetMapping(value = "/getUploadedResources/{filename}", produces = MediaType.ALL_VALUE)
+    public @ResponseBody byte[] getUploadedResource(@PathVariable String filename, HttpServletResponse response) throws IOException {
+        String basePath = "uploadedFiles" + File.separator + "resources" + File.separator;
+        File file = new File(basePath+filename);
+
+        // Set the Content-Disposition header
+        response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+
+        return Files.readAllBytes(file.toPath());
+    }
+
+    @GetMapping("/resources")
+    public String resources() {return "resources";}
 }

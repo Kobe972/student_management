@@ -46,4 +46,14 @@ public class UserService implements UserDetailsService {
         userMapper.insertUserToAutoUserRole(user.getUserId(),"member");
         return true;
     }
+    public boolean insertFaculty(String username, String password)
+    {
+        User user=getUserByName(username);
+        if(user!=null) return false;
+        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+        userMapper.insertUserToAuthUser(username,bCryptPasswordEncoder.encode(password));
+        user=getUserByName(username);
+        userMapper.insertUserToAutoUserRole(user.getUserId(),"faculty");
+        return true;
+    }
 }

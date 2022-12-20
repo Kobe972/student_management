@@ -24,20 +24,17 @@
           </ul>
         </nav>
       </div>      
-        <h2>课程推荐</h2>
-        <div id="courseList">
-          <div v-for="course in courses" :key="course.title" class="courseItem" @click="navigateTo(course.signUpURL)">
+        <h2>资料分享</h2>
+        <div id="resourceList">
+          <div v-for="resource in resources" :key="resource.title" class="resourceItem" @click="navigateTo(resource.url)">
             <div>
-              <img v-bind:src="course.coverURL" alt="course image">
+              <h3>{{ resource.title }}</h3>
             </div>
             <div>
-              <h3>{{ course.title }}</h3>
-            </div>
-            <div>
-              <p>{{ course.description }}</p>
+              <p>{{ resource.description }}</p>
             </div>
             <div v-if="isRoot">
-              <a :href="'/delete/courseInfo/?id=' + course.id + '&coverURL=' + course.coverURL">删除</a>
+              <a :href="'/delete/resource/?id=' + resource.id + '&url=' + resource.url">删除</a>
             </div>            
           </div>
         </div>
@@ -70,19 +67,19 @@
           },
         });
         new Vue({
-        el: '#courseList',
+        el: '#resourceList',
         data: {
-            courses: []
+            resources: []
         },
         mounted() {
-            this.fetchCourses();
+            this.fetchResources();
             this.getRole();
         },
         methods: {
-            fetchCourses() {
-            axios.get('http://127.0.0.1:8080/courseList?num=5')
+          fetchResources() {
+            axios.get('http://127.0.0.1:8080/resourceList?num=10')
                 .then(response => {
-                this.courses = response.data
+                this.resources = response.data
                 })
                 .catch(error => {
                 console.error(error)
@@ -91,7 +88,7 @@
             getRole() {
               axios.get('http://127.0.0.1:8080/getRole')
               .then(response => {
-                this.isRoot = response.data.includes("ROLE_root");
+                this.isRoot = response.data.includes("ROLE_root")|response.data.includes("ROLE_faculty");
               })
               .catch(error => {
                 console.error(error)
@@ -104,21 +101,16 @@
         });
         </script>
         <style>
-            div.courseItem {
-              display: inline-flex;
+            div.resourceItem {
+              display: flex;
               flex-direction: column;
               align-items: center;
               cursor: pointer;
               width: 300px;
               margin: 0 10px;
             }
-            
-            div.courseItem img {
-              width: 200px;
-              height: 150px;
-            }
-            
-            div.courseItem h3 {
+
+            div.resourceItem h3 {
               font-weight: bold;
             }
         </style>
